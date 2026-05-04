@@ -1,20 +1,41 @@
-# Maindex Smart
+# Maindex Smart MCP Server
 
-**Persistent, relational memory for AI agents and their humans.**
+This is the official Maindex Smart MCP server published by [Maindex](https://maindex.io).
 
-Maindex Smart is the streamlined MCP interface — four intuitive tools that give any AI agent long-term memory. Behind the scenes, Smart routing handles retrieval strategy, ambiguity resolution, and content shaping so the agent doesn't have to.
+Maindex Smart is a hosted remote MCP service. No local installation is required.
+
+[Website](https://maindex.io) | [Help & FAQ](https://maindex.io/help) | [Dashboard](https://maindex.io/dashboard)
+
+Maindex Smart provides simple, user-controlled memory for AI assistants. It exposes four explicit tools for keeping, recalling, updating, and forgetting information across sessions. There is no hidden automatic collection — every memory operation is initiated by you or your agent. Safe defaults are built in: LLM rewriting is off unless explicitly requested, and irreversible wipes require explicit confirmation.
 
 Both Smart and Expert services are included with every Maindex plan at no additional cost. They read and write the same memory graph, and you can switch between them or use both simultaneously.
 
-**MCP Endpoint:** `https://maindex.io/mcp`
+## Endpoint
 
----
+`https://maindex.io/mcp`
 
-## Quick Start
+## Tools
 
-### 1. Connect your agent
+- `keep` — store a memory with optional headline, tags, and collections.
+- `recall` — search and retrieve memories using relevant, exact, current_state, history, or recent modes.
+- `update` — update an existing memory by `mem-*` ID.
+- `forget` — soft-delete a memory by `mem-*` ID, or permanently wipe history only with explicit irreversible confirmation.
 
-Add the Maindex Smart MCP server to your AI platform of choice:
+## Installation
+
+Use the hosted endpoint in any MCP client that supports remote streamable HTTP MCP servers.
+
+```json
+{
+  "mcpServers": {
+    "maindex": {
+      "url": "https://maindex.io/mcp"
+    }
+  }
+}
+```
+
+Or install a platform-specific plugin:
 
 | Platform | How to connect |
 |---|---|
@@ -22,43 +43,21 @@ Add the Maindex Smart MCP server to your AI platform of choice:
 | **Claude** | Install [claude-smart-plugin](https://github.com/maindexapp/claude-smart-plugin) |
 | **Gemini** | Install [gemini-smart-plugin](https://github.com/maindexapp/gemini-smart-plugin) as a Gemini Extension |
 | **OpenClaw** | Install [openclaw-smart-plugin](https://github.com/maindexapp/openclaw-smart-plugin) from the Plugin Registry |
-| **Any MCP client** | Point your MCP client at `https://maindex.io/mcp` (Streamable HTTP transport, OAuth 2.1) |
 
-### 2. Authenticate
+## Example Usage
 
-On first connection, you'll be redirected to [maindex.io](https://maindex.io) to sign in and authorize. OAuth handles the rest.
+- `Keep this preference: I prefer TypeScript for backend examples.`
+- `Recall my language preferences.`
+- `Update mem-abc123 to say I also like Rust.`
+- `Forget mem-abc123.`
 
-### 3. Start remembering
+## Safety and Control
 
-Ask your agent to remember something, and it will use the `keep` tool. Ask a question about your past work, and it will use `recall`. That's it — four tools, no configuration.
-
----
-
-## Tools
-
-| Tool | What it does |
-|---|---|
-| **`keep`** | Store a new memory. Provide `content` (required), optionally `headline`, `tags`, `collections`, `metadata`. Opt into LLM-assisted rewriting with `rewrite: true`. |
-| **`recall`** | Search and retrieve memories. Modes: `relevant` (semantic search), `exact` (literal match), `current_state` (latest revision), `history` (revision trail), `recent` (newest first). Filter by `tags` and `collections`. |
-| **`update`** | Revise an existing memory by `target_id` (mem-* short ID). Change `content`, `headline`, `tags`, or `metadata`. Each update creates a new revision — full history is preserved. |
-| **`forget`** | Remove a memory by `target_id`. Default is a safe, reversible soft-delete. With `wipe_history: true` + `confirm_irreversible_wipe: true`, permanently purges all revisions. |
-
----
-
-## REST API
-
-The same four operations are available as REST endpoints for programmatic access:
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `POST` | `/v1/keep` | Create a memory |
-| `POST` | `/v1/recall` | Search/retrieve memories |
-| `POST` | `/v1/update` | Update a memory |
-| `POST` | `/v1/forget` | Delete a memory |
-
-Request bodies match the MCP tool inputs exactly. All endpoints require OAuth 2.1 bearer tokens.
-
-**Base URL:** `https://maindex.io`
+- `keep` stores user-provided content. No data is collected automatically.
+- `recall` is read-only.
+- `update` and `forget` require explicit `mem-*` targets.
+- `rewrite` defaults to false and performs zero LLM rewriting unless explicitly set to true.
+- `wipe_history` is irreversible and requires `confirm_irreversible_wipe=true`.
 
 ---
 
@@ -80,7 +79,7 @@ Maindex gives you a structured, searchable memory graph accessible through both 
 
 ### Should I use Smart or Expert?
 
-Both are included, both read and write the same memory graph, and you can switch at any time. Use **Smart** when you want the agent to send high-level intents and let the pipeline decide. Use **Expert** when the agent needs direct, granular control over memory operations.
+Both are included, both read and write the same memory graph, and you can switch at any time. Smart is optimized for simple user-controlled memory. Expert is optimized for capable agents that need direct control over the full memory graph.
 
 See the [Expert service](https://github.com/maindexapp/expert-service) for the full-fidelity 14-tool API.
 
@@ -116,4 +115,8 @@ Every account is a fully isolated tenant. Your data is never shared, mixed, or a
 
 - [Expert Service](https://github.com/maindexapp/expert-service) — 14 tools + 6 resources for full graph control
 - [maindex.io](https://maindex.io) — Dashboard and account management
-- [Documentation](https://docs.maindex.io)
+- [Help & FAQ](https://maindex.io/help)
+
+## License
+
+MIT
