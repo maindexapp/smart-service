@@ -113,7 +113,7 @@ Every account is a fully isolated tenant. Your data is never shared, mixed, or a
 
 ## See Also
 
-- [Expert Service](https://github.com/maindexapp/expert-service) — 14 tools + 6 resources for full graph control
+- [Expert Service](https://github.com/maindexapp/expert-service) — 14 tools + 5 resources for full graph control
 - [maindex.io](https://maindex.io) — Dashboard and account management
 - [Help & FAQ](https://maindex.io/help)
 
